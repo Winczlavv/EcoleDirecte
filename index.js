@@ -9,7 +9,7 @@ const server = http.createServer((req, res) => {
   const api = require("api-ecoledirecte-france")
   res.writeHead(200, {'Content-Type': 'text/html'});
 
-api.accounts("LeBonMoustique", "Lurin92")
+api.accounts("PSEUDO", "MDP")
     .then((accounts) => {
         const prenom = accounts[0].prenom;
         const nom = accounts[0].nom;
