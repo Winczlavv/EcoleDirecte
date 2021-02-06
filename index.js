@@ -6,7 +6,7 @@ const port = 3000;
 const EcoleDirecte = require("node-ecole-directe");
 const session = new EcoleDirecte.Session();
 async function fetchNotes() {
-    const compte = await session.connexion("LeBonMoustique", "Lurin92");
+    const compte = await session.connexion("PSEUDO", "MDP");
 
     const notes = await compte.fetchNotes();
     philo = notes.notes.filter((n) => n.codeMatiere == 'PHILO').map((v) => v.valeur)
