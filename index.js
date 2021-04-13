@@ -1,71 +1,38 @@
+// Imports
 const http = require('http');
-const fs = require('fs');
-
-const hostname = '127.0.0.1';
+require('dotenv').config();
 const port = 3000;
 const EcoleDirecte = require("node-ecole-directe");
 const session = new EcoleDirecte.Session();
-async function fetchNotes() {
-    const compte = await session.connexion("PSEUDO", "MDP");
+const express = require('express')
+const app = express()
 
-    const notes = await compte.fetchNotes();
-    philo = notes.notes.filter((n) => n.codeMatiere == 'PHILO').map((v) => v.valeur)
-    return philo
-
-
-};
-
-const server = http.createServer(async (req, res) => {
-
+// Create a server
+const server = http.createServer((req, res) => {
   res.writeHead(200, {'Content-Type': 'text/html'});
-  let file = fs.readFileSync('./index.html', {encoding: 'utf8'})
-
-  file = file.replace('{{NAME}}', await fetchNotes());
-
-  res.write(file);
-  res.end();
 });
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+
+
+async function getNotes(){
+  const compte = await session.connexion(process.env.LOGIN, process.env.PASSWORD);
+  const notes = await compte.fetchNotes();
+  return notes;
+}
+
+async function getNotes(){
+  const compte = await session.connexion(process.env.LOGIN, process.env.PASSWORD);
+  const notes = await compte.fetchNotes();
+  return notes;
+}
+
+// Roots
+app.get('/', async (req, res) => {
+  const notes = await getNotes();
+  console.log(notes.periodes[0].ensembleMatieres);
+  res.send('Hello');
 })
 
 
-/*
-   const http = require('http');
-const fs = require('fs');
-
-const hostname = '127.0.0.1';
-const port = 3000;
-
-
-const server = http.createServer((req, res) => {
-  const api = require("api-ecoledirecte-france")
-  res.writeHead(200, {'Content-Type': 'text/html'});
-
-api.accounts("paul", "Lurin92")
-    .then((accounts) => {
-        const prenom = accounts[0].prenom;
-        const nom = accounts[0].nom;
-        const fam = prenom + " " + nom;
-        let file = fs.readFileSync('./index.html', {encoding: 'utf8'})
-        
-        console.log(accounts);
-
-        file = file.replace('{{NAME}}',fam);
-        
-
-        res.write(file);
-        res.end();
-
-        
-    })
-    .catch((err) => {
-        throw err
-    })
- });
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
-
-*/
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
+})
