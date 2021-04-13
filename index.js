@@ -19,17 +19,17 @@ async function getNotes(){
   return notes;
 }
 
-async function getNotes(){
+async function getEmploiDuTemps(){
   const compte = await session.connexion(process.env.LOGIN, process.env.PASSWORD);
-  const notes = await compte.fetchNotes();
-  return notes;
+  const emploiDuTemps = await compte.fetchEmploiDuTemps();
+  return emploiDuTemps;
 }
 
 // Roots
 app.get('/', async (req, res) => {
-  const notes = await getNotes();
-  console.log(notes.periodes[0].ensembleMatieres);
-  res.send('Hello');
+  const emploiDuTemps = await getEmploiDuTemps();
+  console.log(emploiDuTemps);
+  res.end();
 })
 
 
