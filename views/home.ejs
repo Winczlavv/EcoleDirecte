@@ -1,0 +1,32 @@
+<ODCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Page d'accueil</title>
+    </head>
+<body>
+    <h1>API École Directe</h1>
+
+    <form method="post" action="/profil">
+        <input type="hidden" name="username" value="<%= username %>" />
+        <input type="hidden" name="mdp" value="<%= mdp %>" />
+        <input type="submit" value="Mon profil" />
+    </form>
+
+    <form method="post" action="/notes">
+        <input type="hidden" name="username" value="<%= username %>" />
+        <input type="hidden" name="mdp" value="<%= mdp %>" />
+        <input type="submit" value="Mes notes" />
+    </form>
+
+    <div class="lastNote">
+        <h3>Dernière note obtenue</h3>
+        <p>Matière: <%= lastNote.libelleMatiere %></p>
+        <p>Note: <%= lastNote.valeur %></p>
+        <p>Moyenne de la classe: <%= lastNote.moyenneClasse %></p>
+        <p>Note minimale: <%= lastNote.minClasse %></p>
+        <p>Note maximale: <%= lastNote.maxClasse %></p>
+    </div>
+
+</body>
+</html>
