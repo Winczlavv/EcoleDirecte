@@ -88,6 +88,14 @@ header a:hover{
     justify-content: flex-start;
 }
 
+.nom-prenom{
+    display: flex;
+    justify-content: flex-start;
+}
+.nom-prenom p:nth-child(2){
+    margin-left: 7px;
+}
+
 .infos2{
     display: flex;
     margin-top: -15px;

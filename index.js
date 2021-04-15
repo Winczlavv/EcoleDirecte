@@ -46,18 +46,18 @@ app.get('/connexion', async (req, res) => {
   if(req.session.compte){
     const notes = await getNotes(req.session.compte.data.identifiant, req.session.mdp);
     var last = notes.notes.length - 1;
-    res.render('home', {username:req.session.compte.data.identifiant, mdp:req.session.mdp, lastNote:notes.notes[last]});
+    res.render('index', {username:req.session.compte.data.identifiant, mdp:req.session.mdp, lastNote:notes.notes[last]});
   }
   else{
     res.render('connect', {error: ''});
   }
 })
 
-app.all('/home', async (req, res) => {
+app.all('/index', async (req, res) => {
   if(req.session.compte){
     const notes = await getNotes(req.session.compte.data.identifiant, req.session.mdp);
     var last = notes.notes.length - 1;
-    res.render('home', {username:username, mdp:mdp, lastNote:notes.notes[last]});
+    res.render('index', {username:req.session.compte.data.identifiant, mdp:req.session.mdp, lastNote:notes.notes[last]});
   }
   else{
     var username = req.body.nom;
@@ -69,14 +69,14 @@ app.all('/home', async (req, res) => {
       sess.mdp = mdp;
       const notes = await getNotes(username, mdp);
       var last = notes.notes.length - 1;
-      res.render('home', {username:username, mdp:mdp, lastNote:notes.notes[last]});
+      res.render('index', {username:username, mdp:mdp, lastNote:notes.notes[last]});
     }
     catch(err) {
       if(username == undefined || mdp == undefined){
-        res.render('index', {error: ''})
+        res.render('connect', {error: ''})
       }
       else{
-        res.render('index', {error: "Identifiant ou mot de passe incorrect"});
+        res.render('connect', {error: "Identifiant ou mot de passe incorrect"});
       }
     }
   }
@@ -84,12 +84,24 @@ app.all('/home', async (req, res) => {
 
 
 app.get('/profil', async (req, res) => {
-  res.render('profil', {compte:req.session.compte});
+  if(req.session.compte){
+    res.render('profil', {compte:req.session.compte});
+  }
+  else{
+    res.redirect('/connexion');
+  }
 })
 
 app.get('/notes', async (req, res) => {
-  const notes = await getNotes(req.session.compte.data.identifiant, req.session.mdp);
-  res.render('notes', {notes:notes});
+  if(req.session.compte){
+    const notes = await getNotes(req.session.compte.data.identifiant, req.session.mdp);
+    /* Display the teacher's object (id and name)
+    console.log(notes.periodes[0].ensembleMatieres.disciplines[3].professeurs); */
+    res.render('notes', {notes:notes});
+  }
+  else{
+    res.redirect('/connexion');
+  }
 });
 
 app.get('/deconnexion', (req, res) => {
