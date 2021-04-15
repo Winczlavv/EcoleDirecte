@@ -3,20 +3,43 @@
     <head>
         <meta charset="utf-8" />
         <title>Mon profil</title>
+        <link rel="stylesheet" href="style/profile.css" />
     </head>
 <body>
 
-    <h1>Mon profil</h1>
+    <header>
+        <h1>Mon profil</h1>
+        <a href="/home">Retour</a>
+    </header>
 
-    <p>Nom: <%= compte.data.nom %></p>
-    <p>Prénom: <%= compte.data.prenom %></p>
-    <p>Email: <%= compte.data.email %></p>
-    <p>Établissement: <%= compte.data.nomEtablissement %></p>
-    <p>Classe numéro <%= compte.data.profile.classe.id %></p>
-    
-    <img src="<%= compte.data.profile.photo %>" />
-
-    <a href="/home">Retour en page d'accueil</a>
+    <div class="profil">
+        <div class="first">
+            <div class="image">
+                <img src="<%= compte.data.profile.photo %>" class="img" />
+            </div>
+            <div class="mainInfos">
+                <p><%= compte.data.nom %></p>
+                <p><%= compte.data.prenom %></p>
+                <div class="infos2">
+                    <p class="label">Classe:</p>
+                    <p class="value"><%= compte.data.profile.classe.libelle %></p>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="infos">
+            <p class="label">Établissement:</p>
+            <p class="value"><%= compte.data.nomEtablissement %></p>
+        </div>
+        <div class="infos">
+            <p class="label">Email:</p>
+            <p class="value"><%= compte.data.email %></p>
+        </div>
+        <div class="infos">
+            <p class="label">Numéro de classe:</p>
+            <p class="value"><%= compte.data.profile.classe.id %></p>
+        </div>
+    </div>
 
 </body>
 </html>

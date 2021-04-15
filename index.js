@@ -49,7 +49,7 @@ app.get('/connexion', async (req, res) => {
     res.render('home', {username:req.session.compte.data.identifiant, mdp:req.session.mdp, lastNote:notes.notes[last]});
   }
   else{
-    res.render('index', {error: ''});
+    res.render('connect', {error: ''});
   }
 })
 
@@ -92,6 +92,10 @@ app.get('/notes', async (req, res) => {
   res.render('notes', {notes:notes});
 });
 
+app.get('/deconnexion', (req, res) => {
+  req.session.destroy();
+  res.redirect('/connexion');
+});
 
 // Listening
 app.listen(port, () => {

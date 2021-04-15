@@ -3,21 +3,41 @@
     <head>
         <meta charset="utf-8" />
         <title>Page d'accueil</title>
+        <link rel="stylesheet" href="style/home.css" />
     </head>
 <body>
-    <h1>API École Directe</h1>
+    <header>
+        <h1>API École Directe</h1>
+        <div class="tools">
+            <a href="/profil" class="profile">Mon profil</a>
+            <a href="/deconnexion" class="deco">Se déconnecter</a>
+        </div>
+    </header>
 
-    <a href="/profil">Mon profil</a>
-
-    <a href="/notes">Mes notes</a>
+    <a href="/notes" class="viewNotes">Mes notes</a>
 
     <div class="lastNote">
-        <h3>Dernière note obtenue</h3>
-        <p>Matière: <%= lastNote.libelleMatiere %></p>
-        <p>Note: <%= lastNote.valeur %>/<%= lastNote.noteSur %></p>
-        <p>Moyenne de la classe: <%= lastNote.moyenneClasse %></p>
-        <p>Note minimale: <%= lastNote.minClasse %></p>
-        <p>Note maximale: <%= lastNote.maxClasse %></p>
+        <h2>Dernière note obtenue</h2>
+        <div class="note">
+            <p class="label">Matière:</p>
+            <p class="value"><%= lastNote.libelleMatiere %></p>
+        </div>
+        <div class="note">
+            <p class="label">Note:</p>
+            <p class="value"><%= lastNote.valeur %>/<%= lastNote.noteSur %></p>
+        </div>
+        <div class="note">
+            <p class="label">Moyenne de la classe:</p>
+            <p class="value"><%= lastNote.moyenneClasse %></p>
+        </div>
+        <div class="note">
+            <p class="label">Note minimale:</p>
+            <p class="value"><%= lastNote.minClasse %></p>
+        </div>
+        <div class="note">
+            <p class="label">Note maximale:</p>
+            <p class="value"><%= lastNote.maxClasse %></p>
+        </div>
     </div>
 
 </body>
