@@ -18,8 +18,8 @@ app.set('view engine', 'ejs');
 
 // Middleweres
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname + '/public'));
 app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
+app.use(express.static(__dirname + '/public'));
 
 
 // Functions
@@ -42,33 +42,54 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-app.post('/home', async (req, res) => {
-  var username = req.body.nom;
-  var mdp = req.body.mdp;
-  try {
-    const compte = await ecole.connexion(username, mdp);
-    var sess = req.session;
-    sess.compte = compte;
-    const notes = await getNotes(username, mdp);
+app.get('/connexion', async (req, res) => {
+  if(req.session.compte){
+    const notes = await getNotes(req.session.compte.data.identifiant, req.session.mdp);
+    var last = notes.notes.length - 1;
+    res.render('home', {username:req.session.compte.data.identifiant, mdp:req.session.mdp, lastNote:notes.notes[last]});
+  }
+  else{
+    res.render('index', {error: ''});
+  }
+})
+
+app.all('/home', async (req, res) => {
+  if(req.session.compte){
+    const notes = await getNotes(req.session.compte.data.identifiant, req.session.mdp);
     var last = notes.notes.length - 1;
     res.render('home', {username:username, mdp:mdp, lastNote:notes.notes[last]});
   }
-  catch(err) {
-    res.render('index', {error: "Identifiant ou mot de passe incorrect"});
+  else{
+    var username = req.body.nom;
+    var mdp = req.body.mdp;
+    try {
+      const compte = await ecole.connexion(username, mdp);
+      var sess = req.session;
+      sess.compte = compte;
+      sess.mdp = mdp;
+      const notes = await getNotes(username, mdp);
+      var last = notes.notes.length - 1;
+      res.render('home', {username:username, mdp:mdp, lastNote:notes.notes[last]});
+    }
+    catch(err) {
+      if(username == undefined || mdp == undefined){
+        res.render('index', {error: ''})
+      }
+      else{
+        res.render('index', {error: "Identifiant ou mot de passe incorrect"});
+      }
+    }
   }
 });
 
 
-app.post('/profil', async (req, res) => {
-  console.log(req.session.compte.data.profile.classe.id);
+app.get('/profil', async (req, res) => {
   res.render('profil', {compte:req.session.compte});
 })
 
-app.post('/notes', async (req, res) => {
-  var username = req.body.username;
-  var mdp = req.body.mdp;
-  const compte = await ecole.connexion(username, mdp);
-  const notes = await getNotes(username, mdp);
+app.get('/notes', async (req, res) => {
+  const notes = await getNotes(req.session.compte.data.identifiant, req.session.mdp);
+  res.render('notes', {notes:notes});
 });
 
 

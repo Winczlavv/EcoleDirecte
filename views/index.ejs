@@ -3,16 +3,22 @@
         <head>
             <meta charset="utf-8" />
             <title>Page de connexion</title>
-            <link rel="styleshet" href="style/index.css" />
+            <link rel="stylesheet" href="style/connect.css" />
         </head>
     <body>
-        <% if (error) { %>
-            <p><%= error %></p>
-          <% } %>
+
         <form method="post" action="/home">
-            <input type="text" name="nom" placeholder="Nom d'utilisateur" />
-            <input type="password" name="mdp" placeholder="Mot de passe" />
-            <input type="submit" value="Se connecter" />
+            <h2>Connexion</h2>
+            <% if (error) { %>
+                <p class="error"><%= error %></p>
+            <% } %>
+            <input type="text" name="nom" placeholder="Nom d'utilisateur" class="input" />
+                <br>
+                <br>
+            <input type="password" name="mdp" placeholder="Mot de passe" class="input" />
+                <br>
+                <br>
+            <input type="submit" value="Se connecter" class="submit" />
         </form>
     </body>
     </html>
