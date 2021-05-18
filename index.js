@@ -7,8 +7,9 @@ const ecole = new EcoleDirecte.Session();
 const express = require('express')
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var app = express()
 
+
+var app = express();
 
 
 // EJS
@@ -18,7 +19,7 @@ app.set('view engine', 'ejs');
 
 // Middleweres
 app.use(express.urlencoded({ extended: true }));
-app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
+app.use(session({secret: 'ssshhhhh', saveUninitialized: true, resave: true}));
 app.use(express.static(__dirname + '/public'));
 
 
@@ -44,6 +45,7 @@ app.get('/', (req, res) => {
 
 app.get('/connexion', async (req, res) => {
   if(req.session.compte){
+    console.log('session activée');
     const notes = await getNotes(req.session.compte.data.identifiant, req.session.mdp);
     var last = notes.notes.length - 1;
     res.render('index', {username:req.session.compte.data.identifiant, mdp:req.session.mdp, lastNote:notes.notes[last]});
@@ -64,12 +66,10 @@ app.all('/index', async (req, res) => {
     var mdp = req.body.mdp;
     try {
       const compte = await ecole.connexion(username, mdp);
-      var sess = req.session;
-      sess.compte = compte;
-      sess.mdp = mdp;
+      console.log(compte);
       const notes = await getNotes(username, mdp);
       var last = notes.notes.length - 1;
-      res.render('index', {username:username, mdp:mdp, lastNote:notes.notes[last]});
+      res.render('index', {compte:compte, lastNote:notes.notes[last]});
     }
     catch(err) {
       if(username == undefined || mdp == undefined){
@@ -83,30 +83,14 @@ app.all('/index', async (req, res) => {
 });
 
 
-app.get('/profil', async (req, res) => {
-  if(req.session.compte){
-    res.render('profil', {compte:req.session.compte});
-  }
-  else{
-    res.redirect('/connexion');
-  }
-})
-
-app.get('/notes', async (req, res) => {
-  if(req.session.compte){
-    const notes = await getNotes(req.session.compte.data.identifiant, req.session.mdp);
-    /* Display the teacher's object (id and name)
-    console.log(notes.periodes[0].ensembleMatieres.disciplines[3].professeurs); */
-    res.render('notes', {notes:notes});
-  }
-  else{
-    res.redirect('/connexion');
-  }
-});
-
 app.get('/deconnexion', (req, res) => {
-  req.session.destroy();
-  res.redirect('/connexion');
+  if(req.session.compte || req.session.mdp){
+    req.session.destroy();
+    res.redirect('/connexion');
+  }
+  else{
+    res.redirect('/connexion');
+  }
 });
 
 // Listening
