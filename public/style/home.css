@@ -74,7 +74,7 @@ header .deco:hover{
 
 .all1{
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     margin-top: 50px;
 }
 
@@ -101,12 +101,12 @@ header .deco:hover{
 
 .lastNote{
     width: 400px;
-    background-color: #ededed;
-    border-top: 4px solid #333;
+    border: 2px solid #333;
     padding-top: 15px;
     padding-bottom: 15px;
     font-family: nunito;
     padding-left: 35px;
+    margin-left: 80px;
 }
 
 .lastNote h2{
